@@ -1,0 +1,98 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using MySql.Data.MySqlClient;
+
+namespace KonyvtarWPF
+{
+    internal class Database
+    {
+        private readonly string connectionString =
+            "Server=localhost;" +
+            "Database=wpf_crud;" +
+            "Port=3306;" +
+            "User ID=root;" +
+            "Password=;";
+        public bool TestConnection()
+        {
+            try
+            {
+                MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Database connection failed: {ex.Message}");
+                return false;
+            }
+        }
+
+        //Read
+        public List<Book> GetBooks()
+        {
+            List<Book> books = new List<Book>();
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                string sql = "SELECT * FROM books";
+                MySqlCommand command = new MySqlCommand(sql, connection);
+                MySqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    int id = reader.GetInt32("id");
+                    string title = reader.GetString("title");
+                    string author = reader.GetString("author");
+                    int publishedYear = reader.GetInt32("publish_year");
+                    int price = reader.GetInt32("price");
+                    int stock = reader.GetInt32("stock");
+                    Book book = new Book(id, title, author, publishedYear, price, stock);
+                    books.Add(book);
+                }
+            }
+            return books;
+        }
+
+        public void InsertBook(Book book)
+        {
+            MySqlConnection connection = new MySqlConnection(connectionString);
+            connection.Open();
+
+            string sql = "INSERT INTO books (title, author, published_year, price, stock) VALUES (@title, @author, @publish_year, @price, @stock)";
+            MySqlCommand command = new MySqlCommand(sql, connection);
+            command.Parameters.AddWithValue("@title", book.Title);
+            command.Parameters.AddWithValue("@author", book.Author);
+            command.Parameters.AddWithValue("@publish_year", book.PublishedYear);
+            command.Parameters.AddWithValue("@price", book.Price);
+            command.Parameters.AddWithValue("@stock", book.Stock);
+            command.ExecuteNonQuery();
+        }
+
+        public void UpdateBook(Book book)
+        {
+            MySqlConnection connection = new MySqlConnection(connectionString);
+            connection.Open();
+
+            string sql = "UPDATE books SET title=@title, author=@author, published_year=@publish_year, price=@price, stock=@stock WHERE id=@id";
+            MySqlCommand command = new MySqlCommand(sql, connection);
+            command.Parameters.AddWithValue("@title", book.Title);
+            command.Parameters.AddWithValue("@author", book.Author);
+            command.Parameters.AddWithValue("@publish_year", book.PublishedYear);
+            command.Parameters.AddWithValue("@price", book.Price);
+            command.Parameters.AddWithValue("@stock", book.Stock);
+            command.Parameters.AddWithValue("@id", book.Id);
+            command.ExecuteNonQuery();
+
+        }
+
+        public void DeleteBook(int id)
+        {
+            MySqlConnection connection = new MySqlConnection(connectionString);
+            connection.Open();
+            string sql = "DELETE FROM books WHERE id=@id";
+            MySqlCommand command = new MySqlCommand(sql, connection);
+            command.Parameters.AddWithValue("@id", id);
+            command.ExecuteNonQuery();
+        }
+    }
+}
