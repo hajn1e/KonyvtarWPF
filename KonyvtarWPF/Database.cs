@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using MySql.Data.MySqlClient;
+using ZstdSharp.Unsafe;
 
 namespace KonyvtarWPF
 {
@@ -44,7 +45,7 @@ namespace KonyvtarWPF
                     string title = reader.GetString("title");
                     string author = reader.GetString("author");
                     int publishedYear = reader.GetInt32("publish_year");
-                    int price = reader.GetInt32("price");
+                    decimal price = reader.GetDecimal("price");
                     int stock = reader.GetInt32("stock");
                     Book book = new Book(id, title, author, publishedYear, price, stock);
                     books.Add(book);
@@ -93,6 +94,34 @@ namespace KonyvtarWPF
             MySqlCommand command = new MySqlCommand(sql, connection);
             command.Parameters.AddWithValue("@id", id);
             command.ExecuteNonQuery();
+        }
+
+
+        public List<Book> SearchBooks(string search)
+        {
+            List<Book> books = new List<Book>();
+            MySqlConnection connection = new MySqlConnection(connectionString);
+            connection.Open();
+
+            string sql = "SELECT * FROM books where title LIKE @search OR author LIKE @search";
+            MySqlCommand command = new MySqlCommand(sql, connection);
+
+            command.Parameters.AddWithValue("@search", "%" + search + "%");
+            MySqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                Book book = new Book(
+                    reader.GetInt32("id"),
+                    reader.GetString("title"),
+                    reader.GetString("author"),
+                    reader.GetInt32("publish_year"),
+                    reader.GetDecimal("price"),
+                    reader.GetInt32("stock"));
+                books.Add(book);        
+            }
+            return books;
+
         }
     }
 }

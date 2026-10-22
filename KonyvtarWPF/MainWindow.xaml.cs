@@ -104,7 +104,7 @@ namespace KonyvtarWPF
                 return null;
             }
 
-            bool validPrice = int.TryParse(TxtPrice.Text.Trim(), out int price);
+            bool validPrice = decimal.TryParse(TxtPrice.Text.Trim(), out decimal price);
             if (!validPrice)
             {
                 MessageBox.Show("Az árnak egész számnak kell lennie");
