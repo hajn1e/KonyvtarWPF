@@ -40,7 +40,7 @@
                            Grid.Column="0"
                            Text="Könyv címe"
                            VerticalAlignment="Center"/> 
-                <TextBox x:Name="TitleTextBox"
+                <TextBox x:Name="TxtTitle"
                          Grid.Row="0"
                          Grid.Column="1"
                          Height="30"
@@ -50,7 +50,7 @@
                             Grid.Column="3"
                             Text="Szerző"
                             VerticalAlignment="Center"/>
-                <TextBox x:Name="AuthorTextBox"
+                <TextBox x:Name="TxtAuthor"
                          Grid.Row="0"
                          Grid.Column="4"
                          Height="30"
@@ -60,7 +60,7 @@
                            Grid.Column="0"
                            Text="Kiadási év:"
                            VerticalAlignment="Center"/>   
-                <TextBox x:Name="PublicationYearTextBox"
+                <TextBox x:Name="TxtYear"
                           Grid.Row="1"
                           Grid.Column="1"
                           Height="30"
@@ -70,7 +70,7 @@
                            Grid.Column="3"
                            Text="Ár:"
                            VerticalAlignment="Center"/>   
-                <TextBox x:Name="PriceTextBox"
+                <TextBox x:Name="TxtPrice"
                           Grid.Row="1"
                           Grid.Column="4"
                           Height="30"
@@ -80,7 +80,7 @@
                            Grid.Column="0"
                            Text="Készlet:"
                            VerticalAlignment="Center"/>
-                <TextBox x:Name="StockTextBox"
+                <TextBox x:Name="TxtStock"
                           Grid.Row="2"
                           Grid.Column="1"
                           Height="30"
@@ -97,27 +97,27 @@
                             Content="Hozzáadás"
                             Width="120"
                             Height="35"
-                            Margin="5"/>
+                            Margin="5" Click="AddBookButton_Click"/>
                     <Button x:Name="UpdateBookButton"
                             Content="Módosítás"
                             Width="120"
                             Height="35"
-                            Margin="5"/>
+                            Margin="5" Click="UpdateBookButton_Click"/>
                     <Button x:Name="DeleteBookButton"
                             Content="Törlés"
                             Width="120"
                             Height="35"
-                            Margin="5"/>
+                            Margin="5" Click="DeleteBookButton_Click"/>
                     <Button x:Name="ClearFieldsButton"
                             Content="Mezők törlése"
                             Width="120"
                             Height="35"
-                            Margin="5"/>
+                            Margin="5" Click="ClearFieldsButton_Click"/>
                     <Button x:Name="UpdateButton"
                             Content="Frissítés"
                             Width="120"
                             Height="35"
-                            Margin="5"/>
+                            Margin="5" Click="UpdateButton_Click"/>
                 </StackPanel>
             </Grid>
         </Border>
@@ -140,8 +140,9 @@
                       IsReadOnly="True"
                       CanUserAddRows="False"
                       SelectionMode="Single"
-                      SelectionUnit="FullRow"/>
-            <TextBlock x:Name="StatusTextBlock"
+                      SelectionUnit="FullRow"
+                      SelectionChanged="BooksDataGrid_SelectionChanged_1"/>
+            <TextBlock x:Name="TxtStatus"
                        Grid.Row="2"
                        Text=""
                        FontWeight="Bold"

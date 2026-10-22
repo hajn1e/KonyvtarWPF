@@ -58,7 +58,7 @@ namespace KonyvtarWPF
             MySqlConnection connection = new MySqlConnection(connectionString);
             connection.Open();
 
-            string sql = "INSERT INTO books (title, author, published_year, price, stock) VALUES (@title, @author, @publish_year, @price, @stock)";
+            string sql = "INSERT INTO books (title, author, publish_year, price, stock) VALUES (@title, @author, @publish_year, @price, @stock)";
             MySqlCommand command = new MySqlCommand(sql, connection);
             command.Parameters.AddWithValue("@title", book.Title);
             command.Parameters.AddWithValue("@author", book.Author);
@@ -73,7 +73,7 @@ namespace KonyvtarWPF
             MySqlConnection connection = new MySqlConnection(connectionString);
             connection.Open();
 
-            string sql = "UPDATE books SET title=@title, author=@author, published_year=@publish_year, price=@price, stock=@stock WHERE id=@id";
+            string sql = "UPDATE books SET title=@title, author=@author, publish_year=@publish_year, price=@price, stock=@stock WHERE id=@id";
             MySqlCommand command = new MySqlCommand(sql, connection);
             command.Parameters.AddWithValue("@title", book.Title);
             command.Parameters.AddWithValue("@author", book.Author);
